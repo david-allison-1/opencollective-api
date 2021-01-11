@@ -1,19 +1,18 @@
-import { GraphQLBoolean, GraphQLInputObjectType, GraphQLString } from 'graphql';
+import { GraphQLBoolean, GraphQLInputObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
 
 import { IsoDateString } from '../../v1/types';
 
 import { AccountReferenceInput } from './AccountReferenceInput';
 
-export const UpdateAttributesInput = new GraphQLInputObjectType({
-  name: 'UpdateAttributesInput',
+export const UpdateCreateInput = new GraphQLInputObjectType({
+  name: 'UpdateCreateInput',
   description: 'Input type for UpdateType',
   fields: () => ({
-    id: { type: GraphQLString },
-    slug: { type: GraphQLString },
-    title: { type: GraphQLString },
+    title: { type: new GraphQLNonNull(GraphQLString) },
     isPrivate: { type: GraphQLBoolean },
     makePublicOn: { type: IsoDateString },
     html: { type: GraphQLString },
     fromAccount: { type: AccountReferenceInput },
+    account: { type: new GraphQLNonNull(AccountReferenceInput) },
   }),
 });

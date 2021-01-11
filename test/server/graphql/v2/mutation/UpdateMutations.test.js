@@ -64,15 +64,15 @@ describe('server/graphql/v2/mutation/UpdateMutations', () => {
     update = {
       title: 'Monthly update 2',
       html: 'This is the update',
-      collective: {
-        id: collective1.id,
+      account: {
+        legacyId: collective1.id,
       },
     };
   });
 
   describe('create an update', () => {
     const createUpdateMutation = gqlV2/* GraphQL */ `
-      mutation CreateUpdate($update: UpdateInput!) {
+      mutation CreateUpdate($update: UpdateCreateInput!) {
         createUpdate(update: $update) {
           id
           slug
@@ -212,7 +212,7 @@ describe('server/graphql/v2/mutation/UpdateMutations', () => {
 
   describe('edit an update', () => {
     const editUpdateMutation = gqlV2/* GraphQL */ `
-      mutation EditUpdate($update: UpdateAttributesInput!) {
+      mutation EditUpdate($update: UpdateUpdateInput!) {
         editUpdate(update: $update) {
           id
           slug

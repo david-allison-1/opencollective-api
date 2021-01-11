@@ -979,35 +979,6 @@ type Collective implements Account & AccountWithHost & AccountWithContributions 
   contributionPolicy: String
 }
 
-"""
-Input type for attributes of CollectiveInputType
-"""
-input CollectiveAttributesInputType {
-  id: Int
-  slug: String
-  type: String
-  name: String
-  company: String
-  firstName: String
-  lastName: String
-  email: String
-  description: String
-  longDescription: String
-  expensePolicy: String
-  website: String
-  twitterHandle: String
-  githubHandle: String
-  location: LocationInputType
-  startsAt: String
-  endsAt: String
-  timezone: String
-  currency: String
-  settings: JSON
-  isIncognito: Boolean
-  tags: [String]
-  contributionPolicy: String
-}
-
 input CollectiveCreateInput {
   name: String!
   slug: String!
@@ -1111,7 +1082,7 @@ input CommentCreateInput {
   expense: ExpenseReferenceInput
   ExpenseId: Int
   ConversationId: String
-  UpdateId: String
+  update: UpdateReferenceInput
 }
 
 input CommentReferenceInput {
@@ -2801,28 +2772,6 @@ enum Currency {
   Peso Uruguayo
   """
   UYU
-}
-
-"""
-Input for custom fields for order
-"""
-input CustomFieldsInputType {
-  type: CustomFieldType
-  name: String
-  label: String
-  required: Boolean
-}
-
-"""
-Type of custom field
-"""
-enum CustomFieldType {
-  number
-  text
-  email
-  date
-  radio
-  url
 }
 
 scalar DateString
@@ -4835,36 +4784,6 @@ input LocationInput {
 }
 
 """
-Input type for Location
-"""
-input LocationInputType {
-  """
-  A short name for the location (eg. Google Headquarters)
-  """
-  name: String
-
-  """
-  Postal address without country (eg. 12 opensource avenue, 7500 Paris)
-  """
-  address: String
-
-  """
-  Two letters country code (eg. FR, BE...etc)
-  """
-  country: String
-
-  """
-  Latitude
-  """
-  lat: Float
-
-  """
-  Longitude
-  """
-  long: Float
-}
-
-"""
 This represents a Member relationship (ie: Organization backing a Collective)
 """
 type Member {
@@ -5542,11 +5461,11 @@ type Mutation {
     """
     message: String
   ): Member!
-  createUpdate(update: UpdateInput!): Update
-  editUpdate(update: UpdateAttributesInput!): Update
-  publishUpdate(id: String!, notificationAudience: UpdateAudienceType!): Update
-  unpublishUpdate(id: String!): Update
-  deleteUpdate(id: String!): Update
+  createUpdate(update: UpdateCreateInput!): Update!
+  editUpdate(update: UpdateUpdateInput!): Update!
+  publishUpdate(id: String!, notificationAudience: UpdateAudienceType!): Update!
+  unpublishUpdate(id: String!): Update!
+  deleteUpdate(id: String!): Update!
 }
 
 input NewAccountOrganizationInput {
@@ -6962,58 +6881,6 @@ type TierCollection implements Collection {
   nodes: [Tier]
 }
 
-"""
-Input type for TierType
-"""
-input TierInputType {
-  id: Int
-  type: String
-  name: String
-  description: String
-
-  """
-  A long, html-formatted description.
-  """
-  longDescription: String
-
-  """
-  Link to a video (YouTube, Vimeo).
-  """
-  videoUrl: String
-
-  """
-  amount in the lowest unit of the currency of the host (ie. in cents)
-  """
-  amount: Int
-
-  """
-  Button text
-  """
-  button: String
-  currency: String
-  presets: [Int]
-  interval: String
-  maxQuantity: Int
-  minimumAmount: Int
-  amountType: String
-
-  """
-  amount that you are trying to raise with this tier
-  """
-  goal: Int
-  customFields: [CustomFieldsInputType]
-
-  """
-  Start of the campaign
-  """
-  startsAt: String
-
-  """
-  End of the campaign
-  """
-  endsAt: String
-}
-
 enum TierInterval {
   month
   year
@@ -7187,7 +7054,7 @@ type Update {
   """
   Indicates whether or not the user is allowed to see the content of this update
   """
-  userCanSeeUpdate: Boolean
+  userCanSeeUpdate: Boolean!
   isPrivate: Boolean!
   title: String!
   createdAt: DateTime!
@@ -7204,20 +7071,7 @@ type Update {
   """
   List the comments for this update. Not backed by a loader, don't use this in lists.
   """
-  comments(limit: Int, offset: Int): CommentCollection
-}
-
-"""
-Input type for UpdateType
-"""
-input UpdateAttributesInput {
-  id: String
-  slug: String
-  title: String
-  isPrivate: Boolean
-  makePublicOn: IsoDateString
-  html: String
-  fromAccount: AccountReferenceInput
+  comments(limit: Int, offset: Int): CommentCollection!
 }
 
 """
@@ -7253,19 +7107,33 @@ type UpdateCollection implements Collection {
 """
 Input type for UpdateType
 """
-input UpdateInput {
-  id: Int
-  views: Int
-  slug: String
-  title: String
-  image: String
+input UpdateCreateInput {
+  title: String!
   isPrivate: Boolean
   makePublicOn: IsoDateString
-  markdown: String
   html: String
-  fromCollective: CollectiveAttributesInputType
-  collective: CollectiveAttributesInputType!
-  tier: TierInputType
+  fromAccount: AccountReferenceInput
+  account: AccountReferenceInput!
+}
+
+input UpdateReferenceInput {
+  """
+  The public id identifying the update
+  """
+  id: String
+}
+
+"""
+Input type for UpdateType
+"""
+input UpdateUpdateInput {
+  id: String!
+  slug: String
+  title: String
+  isPrivate: Boolean
+  makePublicOn: ISODateTime
+  html: String
+  fromAccount: AccountReferenceInput
 }
 
 """

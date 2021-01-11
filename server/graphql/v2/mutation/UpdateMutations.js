@@ -2,16 +2,16 @@ import { GraphQLNonNull, GraphQLString } from 'graphql';
 
 import { createUpdate, deleteUpdate, editUpdate, publishUpdate, unpublishUpdate } from '../../common/update';
 import { UpdateAudienceType } from '../enum';
-import { UpdateAttributesInput } from '../input/UpdateAttributesInput';
-import { UpdateInput } from '../input/UpdateInput';
+import { UpdateCreateInput } from '../input/UpdateCreateInput';
+import { UpdateUpdateInput } from '../input/UpdateUpdateInput';
 import Update from '../object/Update';
 
 const updateMutations = {
   createUpdate: {
-    type: Update,
+    type: new GraphQLNonNull(Update),
     args: {
       update: {
-        type: new GraphQLNonNull(UpdateInput),
+        type: new GraphQLNonNull(UpdateCreateInput),
       },
     },
     resolve(_, args, req) {
@@ -19,10 +19,10 @@ const updateMutations = {
     },
   },
   editUpdate: {
-    type: Update,
+    type: new GraphQLNonNull(Update),
     args: {
       update: {
-        type: new GraphQLNonNull(UpdateAttributesInput),
+        type: new GraphQLNonNull(UpdateUpdateInput),
       },
     },
     resolve(_, args, req) {
@@ -30,7 +30,7 @@ const updateMutations = {
     },
   },
   publishUpdate: {
-    type: Update,
+    type: new GraphQLNonNull(Update),
     args: {
       id: {
         type: new GraphQLNonNull(GraphQLString),
@@ -44,7 +44,7 @@ const updateMutations = {
     },
   },
   unpublishUpdate: {
-    type: Update,
+    type: new GraphQLNonNull(Update),
     args: {
       id: {
         type: new GraphQLNonNull(GraphQLString),
@@ -55,7 +55,7 @@ const updateMutations = {
     },
   },
   deleteUpdate: {
-    type: Update,
+    type: new GraphQLNonNull(Update),
     args: {
       id: {
         type: new GraphQLNonNull(GraphQLString),

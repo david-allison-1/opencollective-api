@@ -21,7 +21,7 @@ const Update = new GraphQLObjectType({
       slug: { type: new GraphQLNonNull(GraphQLString) },
       userCanSeeUpdate: {
         description: 'Indicates whether or not the user is allowed to see the content of this update',
-        type: GraphQLBoolean,
+        type: new GraphQLNonNull(GraphQLBoolean),
         resolve(update, _, req) {
           if (!update.isPrivate) {
             return true;
@@ -70,7 +70,7 @@ const Update = new GraphQLObjectType({
         },
       },
       comments: {
-        type: CommentCollection,
+        type: new GraphQLNonNull(CommentCollection),
         description: "List the comments for this update. Not backed by a loader, don't use this in lists.",
         args: {
           limit: { type: GraphQLInt },

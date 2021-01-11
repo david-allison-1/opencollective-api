@@ -2112,6 +2112,11 @@ type Mutation {
     @deprecated(reason: "2020-10-13: This endpoint has been moved to GQLV2")
   confirmOrder(order: ConfirmOrderInputType!): OrderType
   addFundsToCollective(order: OrderInputType!): OrderType
+  createUpdate(update: UpdateInputType!): UpdateType @deprecated(reason: "This endpoint has been moved to GQLV2")
+  editUpdate(update: UpdateAttributesInputType!): UpdateType
+  publishUpdate(id: Int!, notificationAudience: UpdateAudienceTypeEnum!): UpdateType
+  unpublishUpdate(id: Int!): UpdateType
+  deleteUpdate(id: Int!): UpdateType
   createComment(comment: CommentInputType!): CommentType
   editComment(comment: CommentAttributesInputType!): CommentType
   deleteComment(id: Int!): CommentType
@@ -3688,6 +3693,12 @@ type Tier {
   Returns true if the tier has a long description
   """
   hasLongDescription: Boolean
+    @deprecated(reason: "2020-12-24: This field is being deprecated in favor of useStandalonePage")
+
+  """
+  Returns true if the tier has its standalone page activated
+  """
+  useStandalonePage: Boolean
 
   """
   Link to a video (YouTube, Vimeo).
@@ -3743,6 +3754,11 @@ input TierInputType {
   A long, html-formatted description.
   """
   longDescription: String
+
+  """
+  Whether this tier has a standalone page
+  """
+  useStandalonePage: Boolean
 
   """
   Link to a video (YouTube, Vimeo).
@@ -3911,6 +3927,23 @@ enum TypeOfCollective {
 }
 
 """
+Input type for UpdateType
+"""
+input UpdateAttributesInputType {
+  id: Int
+  views: Int
+  slug: String
+  title: String
+  image: String
+  isPrivate: Boolean
+  makePublicOn: IsoDateString
+  markdown: String
+  html: String
+  fromCollective: CollectiveAttributesInputType
+  tier: TierInputType
+}
+
+"""
 Defines targets for an update
 """
 enum UpdateAudienceTypeEnum {
@@ -3928,6 +3961,24 @@ enum UpdateAudienceTypeEnum {
   Will be sent to financial contributors
   """
   FINANCIAL_CONTRIBUTORS
+}
+
+"""
+Input type for UpdateType
+"""
+input UpdateInputType {
+  id: Int
+  views: Int
+  slug: String
+  title: String
+  image: String
+  isPrivate: Boolean
+  makePublicOn: IsoDateString
+  markdown: String
+  html: String
+  fromCollective: CollectiveAttributesInputType
+  collective: CollectiveAttributesInputType!
+  tier: TierInputType
 }
 
 """
