@@ -26,7 +26,7 @@ const Update = new GraphQLObjectType({
           if (!update.isPrivate) {
             return true;
           }
-          return req.remoteUser && req.remoteUser.canSeeUpdates(update.CollectiveId);
+          return Boolean(req.remoteUser && req.remoteUser.canSeeUpdates(update.CollectiveId));
         },
       },
       isPrivate: { type: new GraphQLNonNull(GraphQLBoolean) },
